@@ -49,5 +49,17 @@ void mettre_a_jour(JeuDeLaVie *jeu) {
 
 
 void txt_vers_grille(JeuDeLaVie *jeu, FILE *fichier) {
-	
+	int i = 0, j = 0;
+	int val;
+
+	while (fscanf(fichier, "%d", &val) != EOF) {
+		jeu->grille[i][j] = val;
+		j++;
+
+		if (j >= LARGEUR) {
+			j = 0;
+			i++;
+		}
+	}
+
 }
