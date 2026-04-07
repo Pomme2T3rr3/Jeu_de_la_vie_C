@@ -14,6 +14,10 @@ void initialiser_jeu(JeuDeLaVie* jeu, int toroidale) {
 	initialiser_grille(jeu);
 }
 
+int est_vivante(const JeuDeLaVie jeu, int i, int j) {
+	return jeu.grille[i][j];
+}
+
 int nb_cases_vivantes(const JeuDeLaVie jeu, int i, int j) {
 	int cpt = 0;
 
@@ -37,7 +41,7 @@ int nb_cases_vivantes(const JeuDeLaVie jeu, int i, int j) {
 	return cpt;
 }
 
-void mettre_a_jour(JeuDeLaVie *jeu) {
+void mettre_a_jour_Conway(JeuDeLaVie *jeu) {
     int tmp[HAUTEUR][LARGEUR];
 
     for (int i = 0; i < HAUTEUR; i++)
@@ -47,6 +51,38 @@ void mettre_a_jour(JeuDeLaVie *jeu) {
             if (n == 3) tmp[i][j] = 1;
             else if (n == 2) tmp[i][j] = jeu->grille[i][j];
             else tmp[i][j] = 0;
+        }
+    memcpy(jeu->grille, tmp, sizeof(tmp));
+}
+
+
+void mettre_a_jour_Majorite(JeuDeLaVie *jeu) {
+    int tmp[HAUTEUR][LARGEUR];	// tableau temp -> stocker nouvelles valeurs
+
+    for (int i = 0; i < HAUTEUR; i++)
+        for (int j = 0; j < LARGEUR; j++) {
+            int n = nb_cases_vivantes(*jeu, i, j);
+
+            if ((n > 4) && (est_vivante(*jeu, i, j)))
+                tmp[i][j] = 1;
+            else
+                tmp[i][j] = 0;
+        }
+    memcpy(jeu->grille, tmp, sizeof(tmp));
+}
+
+
+void mettre_a_jour_Langton(JeuDeLaVie *jeu) {
+    int tmp[HAUTEUR][LARGEUR];	// tableau temp -> stocker nouvelles valeurs
+
+    for (int i = 0; i < HAUTEUR; i++)
+        for (int j = 0; j < LARGEUR; j++) {
+            int n = nb_cases_vivantes(*jeu, i, j);
+
+            if ((n > 4) && (est_vivante(*jeu, i, j)))
+                tmp[i][j] = 1;
+            else
+                tmp[i][j] = 0;
         }
     memcpy(jeu->grille, tmp, sizeof(tmp));
 }

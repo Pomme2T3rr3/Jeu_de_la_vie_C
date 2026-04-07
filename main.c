@@ -14,7 +14,7 @@ int main() {
 	fclose(f);
 
 	while(running) {
-		mettre_a_jour(&jeu);
+		mettre_a_jour_Conway(&jeu);
 		afficher_grille(jeu);
 		usleep(50000);
 	}
