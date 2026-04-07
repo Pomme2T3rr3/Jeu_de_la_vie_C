@@ -38,13 +38,17 @@ int nb_cases_vivantes(const JeuDeLaVie jeu, int i, int j) {
 }
 
 void mettre_a_jour(JeuDeLaVie *jeu) {
-	for (int i = 0; i < HAUTEUR; i++) {
-		for (int j = 0; j < LARGEUR; j++) {
-			if (nb_cases_vivantes(*jeu, i, j) == 3) jeu->grille[i][j] = 1;
-			else if (nb_cases_vivantes(*jeu, i, j) == 2) continue;
-			else jeu->grille[i][j] = 0;
-		}
-	}
+    int tmp[HAUTEUR][LARGEUR];
+
+    for (int i = 0; i < HAUTEUR; i++)
+        for (int j = 0; j < LARGEUR; j++) {
+            int n = nb_cases_vivantes(*jeu, i, j);
+
+            if (n == 3) tmp[i][j] = 1;
+            else if (n == 2) tmp[i][j] = jeu->grille[i][j];
+            else tmp[i][j] = 0;
+        }
+    memcpy(jeu->grille, tmp, sizeof(tmp));
 }
 
 
@@ -52,14 +56,13 @@ void txt_vers_grille(JeuDeLaVie *jeu, FILE *fichier) {
 	int i = 0, j = 0;
 	int val;
 
-	while (fscanf(fichier, "%d", &val) != EOF) {
-		jeu->grille[i][j] = val;
-		j++;
-
-		if (j >= LARGEUR) {
-			j = 0;
-			i++;
-		}
+	int c;
+	while ((c = fgetc(fichier)) != EOF) {
+	    if (c == '0' || c == '1') {
+	        jeu->grille[i][j] = c - '0';
+	        if (++j >= LARGEUR) { j = 0; i++; }
+	    }
+	    // ignore '\n' et autres caractères
 	}
 
 }
