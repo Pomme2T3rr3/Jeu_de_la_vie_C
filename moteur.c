@@ -63,7 +63,7 @@ void mettre_a_jour_Majorite(JeuDeLaVie *jeu) {
         for (int j = 0; j < LARGEUR; j++) {
             int n = nb_cases_vivantes(*jeu, i, j);
 
-            if ((n > 4) && (est_vivante(*jeu, i, j)))
+            if ((n + est_vivante(*jeu, i, j)) > 4)
                 tmp[i][j] = 1;
             else
                 tmp[i][j] = 0;
@@ -90,15 +90,13 @@ void mettre_a_jour_Langton(JeuDeLaVie *jeu) {
 
 void txt_vers_grille(JeuDeLaVie *jeu, FILE *fichier) {
 	int i = 0, j = 0;
-	int val;
 
 	int c;
 	while ((c = fgetc(fichier)) != EOF) {
 	    if (c == '0' || c == '1') {
 	        jeu->grille[i][j] = c - '0';
-	        if (++j >= LARGEUR) { j = 0; i++; }
+	        if (++j >= LARGEUR) j = 0; i++;
 	    }
-	    // ignore '\n' et autres caractères
 	}
 
 }
